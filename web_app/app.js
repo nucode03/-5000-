@@ -43,10 +43,11 @@ function availableLetters() {
 }
 
 function visibleWords() {
-  const query = state.query.trim().toLocaleLowerCase("en");
+  const query = state.query.trim().toLocaleLowerCase("ko-KR");
   return state.words.filter((word) => {
-    const matchesLetter = query || word.letter === state.selectedLetter;
-    const matchesQuery = !query || `${word.word} ${word.meaning} ${word.partOfSpeech}`.toLocaleLowerCase("en").includes(query);
+    const matchesLetter = Boolean(query) || word.letter === state.selectedLetter;
+    const searchable = `${word.word} ${word.meaning} ${word.partOfSpeech}`.toLocaleLowerCase("ko-KR");
+    const matchesQuery = !query || searchable.includes(query);
     const isDone = state.completed.has(word.id);
     const matchesFilter = state.filter === "all" || (state.filter === "done" ? isDone : !isDone);
     return matchesLetter && matchesQuery && matchesFilter;
@@ -62,15 +63,15 @@ function updateProgress() {
 }
 
 function renderAlphabet() {
-  const letters = availableLetters();
-  elements.alphabetNav.replaceChildren(...letters.map((letter) => {
+  const buttons = availableLetters().map((letter) => {
     const button = document.createElement("button");
+    const active = state.selectedLetter === letter && !state.query;
     button.className = "letter-button";
     button.type = "button";
     button.textContent = letter;
     button.dataset.letter = letter;
-    button.classList.toggle("active", state.selectedLetter === letter && !state.query);
-    button.setAttribute("aria-pressed", String(state.selectedLetter === letter && !state.query));
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
     button.addEventListener("click", () => {
       state.selectedLetter = letter;
       state.query = "";
@@ -78,7 +79,9 @@ function renderAlphabet() {
       render();
     });
     return button;
-  }));
+  });
+
+  elements.alphabetNav.replaceChildren(...buttons);
 }
 
 function toggleComplete(id) {
@@ -93,13 +96,17 @@ function makeCard(word) {
   const card = fragment.querySelector(".word-card");
   const completion = fragment.querySelector(".complete-button");
   const done = state.completed.has(word.id);
+
   fragment.querySelector(".word").textContent = word.word;
   fragment.querySelector(".part-of-speech").textContent = word.partOfSpeech;
   fragment.querySelector(".meaning").textContent = word.meaning;
+  card.dataset.wordId = word.id;
+  completion.dataset.completeId = word.id;
   completion.setAttribute("aria-pressed", String(done));
   completion.setAttribute("aria-label", `${word.word} ${done ? "완료 취소" : "학습 완료"}`);
   card.classList.toggle("is-complete", done);
   completion.addEventListener("click", () => toggleComplete(word.id));
+
   return fragment;
 }
 
@@ -132,20 +139,26 @@ function setupControls() {
     state.query = event.target.value;
     render();
   });
-  elements.filters.forEach((button) => button.addEventListener("click", () => {
-    state.filter = button.dataset.filter;
-    render();
-  }));
+
+  elements.filters.forEach((button) => {
+    button.addEventListener("click", () => {
+      state.filter = button.dataset.filter;
+      render();
+    });
+  });
+
   elements.clearCompleted.addEventListener("click", () => {
     state.completed.clear();
     saveCompleted();
     render();
   });
+
   window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
     state.installPrompt = event;
     elements.installButton.hidden = false;
   });
+
   elements.installButton.addEventListener("click", async () => {
     if (!state.installPrompt) return;
     state.installPrompt.prompt();
@@ -175,5 +188,7 @@ setupControls();
 initialize();
 
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(console.error);
+  });
 }
