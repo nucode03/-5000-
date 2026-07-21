@@ -1,6 +1,7 @@
 {
   "name": "Oxford 5000 한글 단어장",
   "short_name": "Oxford 5000",
+  "description": "Oxford 5000 B2-C1 단어를 한글 뜻과 함께 학습하는 모바일 단어장",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -8,6 +9,8 @@
   "theme_color": "#163A5F",
   "lang": "ko",
   "icons": [
-    { "src": "./icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "./icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
   ]
 }
