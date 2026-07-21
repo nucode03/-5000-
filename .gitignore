@@ -1,0 +1,5 @@
+# Internal render previews used only for visual QA
+build/pdf_pages*/
+build/contact_sheets/
+build/rendered/
+build/mobile_preview/
