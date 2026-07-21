@@ -1,0 +1,13 @@
+{
+  "name": "Oxford 5000 한글 단어장",
+  "short_name": "Oxford 5000",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F7F9FC",
+  "theme_color": "#163A5F",
+  "lang": "ko",
+  "icons": [
+    { "src": "./icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
