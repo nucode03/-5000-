@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#163A5F" />
+    <meta name="description" content="Oxford 5000 B2-C1 한글 단어장" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/icon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>Oxford 5000 단어장</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">Oxford 5000 B2-C1</p>
+          <h1>한글 단어장</h1>
+        </div>
+        <button id="install-button" class="install-button" type="button" hidden>앱 설치</button>
+      </header>
+
+      <main>
+        <section class="progress-panel" aria-label="학습 진행률">
+          <div class="progress-copy">
+            <span>학습 완료</span>
+            <strong id="progress-text">0 / 2,000</strong>
+          </div>
+          <div class="progress-track" aria-hidden="true"><div id="progress-bar"></div></div>
+        </section>
+
+        <section class="controls" aria-label="단어 탐색">
+          <label class="search-box" for="search-input">
+            <span aria-hidden="true">⌕</span>
+            <input id="search-input" type="search" inputmode="search" autocomplete="off" placeholder="영단어 또는 한글 뜻 검색" />
+          </label>
+          <div class="filter-row" role="group" aria-label="학습 상태 필터">
+            <button class="filter active" type="button" data-filter="all">전체</button>
+            <button class="filter" type="button" data-filter="todo">미완료</button>
+            <button class="filter" type="button" data-filter="done">완료</button>
+          </div>
+          <nav id="alphabet-nav" class="alphabet-nav" aria-label="알파벳으로 이동"></nav>
+        </section>
+
+        <section class="list-heading" aria-live="polite">
+          <div>
+            <h2 id="list-title">A</h2>
+            <p id="list-count">단어를 불러오는 중입니다.</p>
+          </div>
+          <button id="clear-completed" class="text-button" type="button" hidden>완료 해제</button>
+        </section>
+        <section id="word-list" class="word-list" aria-label="단어 목록"></section>
+        <p id="empty-state" class="empty-state" hidden>조건에 맞는 단어가 없습니다.</p>
+      </main>
+    </div>
+    <template id="word-card-template">
+      <article class="word-card">
+        <div class="card-top">
+          <div>
+            <h3 class="word"></h3>
+            <p class="part-of-speech"></p>
+          </div>
+          <button class="complete-button" type="button" aria-pressed="false"><span aria-hidden="true">✓</span><span class="sr-only">학습 완료 표시</span></button>
+        </div>
+        <p class="meaning"></p>
+      </article>
+    </template>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
